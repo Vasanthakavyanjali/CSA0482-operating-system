@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+int absDiff(int a, int b) {
+    return abs(a - b);
+}
+int findNearestTrack(int tracks[], int n, int current) {
+    int index = -1;
+    int minDiff = INT_MAX;
+    for (int i = 0; i < n; i++) {
+        if (!tracks[i]) continue; 
+        int diff = absDiff(tracks[i], current);
+        if (diff < minDiff) {
+            minDiff = diff;
+            index = i;
+        }
+    }
+    return index;
+}
+void sstfDiskScheduling(int tracks[], int n, int start) {
+    int totalSeekOperations = 0;
+    int current = start;
+    for (int i = 0; i < n; i++) {
+        int index = findNearestTrack(tracks, n, current);
+        if (index == -1) {
+            printf("Error: Unable to find the nearest track.\n");
+            return;
+        }
+        int nextTrack = tracks[index];
+        totalSeekOperations += absDiff(current, nextTrack);
+        current = nextTrack;
+        tracks[index] = 0; 
+    }
+    printf("Total seek operations: %d\n", totalSeekOperations);
+}
+int main() {
+    int n, start;
+    printf("Enter the number of tracks: ");
+    scanf("%d", &n);
+    int tracks[n];
+    printf("Enter the track positions:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &tracks[i]);
+    }
+    printf("Enter the starting track: ");
+    scanf("%d", &start);
+    sstfDiskScheduling(tracks, n, start);
+    return 0;
+}
