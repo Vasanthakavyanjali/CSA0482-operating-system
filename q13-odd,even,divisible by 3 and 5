@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <unistd.h>
+int main() {
+    int i;
+    for(i = 1; i <= 4; i++) {
+        pid_t pid = fork();
+        if(pid == 0) {
+            printf("Child %d: PID=%d\n", i, getpid());
+            if(i == 1) {
+                for(int j = 1; j <= 10; j += 2) {
+                    printf("%d ", j);
+                }
+                printf("\n");
+            }
+            else if(i == 2) {
+                for(int j = 2; j <= 10; j += 2) {
+                    printf("%d ", j);
+                }
+                printf("\n");
+            }
+            else if(i == 3) {
+                for(int j = 3; j <= 10; j += 3) {
+                    printf("%d ", j);
+                }
+                printf("\n");
+            }
+            else if(i == 4) {
+                for(int j = 5; j <= 10; j += 5) {
+                    printf("%d ", j);
+                }
+                printf("\n");
+            }
+            else {
+                printf("Invalid child process\n");
+            }
+            return 0;
+        }
+    }
+    return 0;
+}
