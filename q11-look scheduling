@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+int abs_diff(int a, int b) {
+    return abs(a - b);
+}
+
+void sortTracks(int tracks[], int n) {
+	int i,j;
+    for (i = 0; i < n - 1; i++) {
+        for ( j = 0; j < n - i - 1; j++) {
+            if (tracks[j] > tracks[j + 1]) {
+                int temp = tracks[j];
+                tracks[j] = tracks[j + 1];
+                tracks[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void lookDisk(int tracks[], int n, int head, bool direction) {
+    sortTracks(tracks, n);
+
+    int total_movement = 0;
+    int index = 0;
+
+    printf("\nSequence of track movements: %d", head);
+
+    if (direction) {
+        index = 0;
+        int i;
+        while (index < n && tracks[index] < head) {
+            total_movement += abs_diff(head, tracks[index]);
+            printf(" -> %d", tracks[index]);
+            head = tracks[index];
+            index++;
+        }
+
+        for ( i = index; i < n; i++) {
+            total_movement += abs_diff(head, tracks[i]);
+            printf(" -> %d", tracks[i]);
+            head = tracks[i];
+        }
+    } else {
+        index = n - 1;
+        int i;
+        while (index >= 0 && tracks[index] > head) {
+            total_movement += abs_diff(head, tracks[index]);
+            printf(" -> %d", tracks[index]);
+            head = tracks[index];
+            index--;
+        }
+
+        for ( i = index; i >= 0; i--) {
+            total_movement += abs_diff(head, tracks[i]);
+            printf(" -> %d", tracks[i]);
+            head = tracks[i];
+        }
+    }
+
+    printf("\n\nTotal head movement: %d\n", total_movement);
+}
+
+int main() {
+    int tracks[20];
+    int n, head, i;
+
+    printf("Enter the number of tracks: ");
+    scanf("%d", &n);
+
+    printf("Enter the track positions: ");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &tracks[i]);
+    }
+
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+
+    bool direction;
+
+    printf("Enter the direction (1 for right, 0 for left): ");
+    scanf("%d", &direction);
+
+    printf("\nRunning LOOK algorithm:");
+    lookDisk(tracks, n, head, direction);
+
+    return 0;
+}
